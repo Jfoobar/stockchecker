@@ -30,7 +30,7 @@ module.exports = function(app) {
     //   try{
     //  (async(results)=>console.log(await results))();
     //   }catch(err) {console.log(err)}
-    // }else{
+    }else{
     const stockData = await getStock(req.query.stock,req.query.like,res);
       res.json({stockData})
     }
