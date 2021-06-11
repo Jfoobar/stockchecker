@@ -25,10 +25,14 @@ module.exports = function(app) {
       const asyncLoop = async ()=>{
         let results = [];
         const arr = req.query.stock
-        for(let stock in arr){
-          let stockInfo = await getStock(arr[stock])
+        for(let x in arr){
+          let stockInfo = await getStock(arr[x])
           results.push(stockInfo)
-          if(req.query.like)results[stock].likes = 1
+          if(req.query.like){
+          //dbase.findOneAndUpdateDB({ip:IP,stocks:
+          //[{stock:'arr[x],likes:todo},{stock:'GOOG',likes:todo}]}
+
+            results[x].likes = 1}
         }
         return results;
     }
