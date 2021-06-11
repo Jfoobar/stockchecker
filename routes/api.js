@@ -26,14 +26,15 @@ module.exports = function(app) {
     if (Array.isArray(req.query.stock)){
       const asyncLoop = async ()=>{
         let results = [];
-        for(let stock of req.query.stock){
-          let stockInfo = await getStock(stock)
+        const arr = req.query.stock
+        for(let stock in arr){
+          let stockInfo = await getStock(arr[stock])
           results.push(stockInfo)
+          if(req.query.like)results[stock].likes = 1
         }
         return results;
     }
     const stockData = await asyncLoop();
-    if(req.query.like) stockData.likes =  1; //not in json, todo
     res.json({stockData})
     console.log(stockData)
 
