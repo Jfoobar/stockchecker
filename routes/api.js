@@ -5,16 +5,14 @@ const dbase = require('../dbase')
 //ip:'1.1.1.4',stocks:[{stock:'msft',likes:1},{stock:'GOOG',likes:1}]}));
 
 module.exports = function(app) {
-
   const getStock = async (stock,res) => {
-			try {
-				const response = await axios.get(
-					`https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/${stock}/quote`
-				);
+	  try {
+			const response = await axios.get(
+				`https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/${stock}/quote`);
 			  console.log(response.data.latestPrice);
         const {symbol,latestPrice} = response.data
         return {stock:symbol,price:latestPrice}
-			} catch (error) {
+		}catch (error) {
 				console.error(error.message)
         res.status(404).json({Msg:error.message, Details:`${stock} is not a valid stock symbol`})
 			}
