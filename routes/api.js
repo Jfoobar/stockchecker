@@ -9,7 +9,6 @@ module.exports = function(app) {
 	  try {
 			const response = await axios.get(
 				`https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/${stock}/quote`);
-			  console.log(response.data.latestPrice);
         const {symbol,latestPrice} = response.data
         return {stock:symbol,price:latestPrice}
 		}catch (error) {
@@ -19,21 +18,23 @@ module.exports = function(app) {
 		}
 	app.route('/api/stock-prices',).get(async (req,res) =>{
 		const IP = req.ip;
-    console.log(IP,req.query);
+    const symbol = req.query.stock;
+    console.log(`${IP} submited this:${req.query}`);
     
-    if (Array.isArray(req.query.stock)){
+    if (Array.isArray(symbol)){
       const asyncLoop = async ()=>{
         let results = [];
-        const arr = req.query.stock
+        const arr = symbol;
         for(let x in arr){
           let stockInfo = await getStock(arr[x])
           results.push(stockInfo)
-          if(req.query.like){
-          //dbase.findOneAndUpdateDB({ip:IP,stocks:
-          //[{stock:'arr[x],likes:todo},{stock:'GOOG',likes:todo}]}
+          if(req.query.like ==='true'){
+          results[x].likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
+          {stock:arr[x],likes:1}})
 
-            results[x].likes = 1}
+          }
         }
+        console.log(results)
         return results;
     }
     const stockData = await asyncLoop();
@@ -42,7 +43,11 @@ module.exports = function(app) {
 
     }else{
       const stockData = await getStock(req.query.stock,res);
-      res.json({stockData})
+      if(req.query.like ==='true'){
+        stockData.likes = dbase.findOneAndUpdateDB({ip:IP,stocks:
+        {stock:symbol,likes:1}});
+      }
+      res.json({stockData});
     }
 	})
 };
