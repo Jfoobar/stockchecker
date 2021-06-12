@@ -29,8 +29,8 @@ module.exports = function(app) {
           let stockInfo = await getStock(arr[x])
           results.push(stockInfo)
           if(req.query.like ==='true'){
-          results[x].likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
-          {stock:arr[x],likes:1}})
+          results[x].rel_likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
+          {stock:arr[x].toUpperCase(),likes:1}})
 
           }
         }
@@ -44,8 +44,8 @@ module.exports = function(app) {
     }else{
       const stockData = await getStock(req.query.stock,res);
       if(req.query.like ==='true'){
-        stockData.likes = dbase.findOneAndUpdateDB({ip:IP,stocks:
-        {stock:symbol,likes:1}});
+        stockData.likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
+        {stock:symbol.toUpperCase(),likes:1}});
       }
       res.json({stockData});
     }

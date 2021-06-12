@@ -13,30 +13,29 @@ const clientSchema = new Schema({
 
 let Client = mongoose.model("Client",clientSchema);
 
-const createEntry = (ip,stocks)=>{
+const createEntry = async (ip,stocks)=>{
+  try{
        Client.init();
        const client = new Client(ip,stocks);
-       client.save()
-       .then((result)=> console.log(result))
-       .catch((err)=>console.log(err));
+       const result = await client.save()
+       console.log(result)
+  }catch{(err)=>console.log(err)};
 }
 
-const findOneAndUpdateDB = (ip,stocks)=>{
-   Client.findOne(ip,(err,foundOne)=>{
-     if(!foundOne){
+const findOneAndUpdateDB = async (ip,stocks)=>{
+  try{
+    const foundOne = await Client.findOne(ip).exec();
+      if(!foundOne){
        createEntry(ip,stocks);
      }else{
-     if(err) {return console.log(err)};
-     }
-   }).then((result)=>{
-     console.log(`Found ${result}`);
+     console.log(`Found ${foundOne}`);
      //like logic
-     if(result.stocks.likes){
+     if(foundOne.stocks.likes){
        console.log("already liked");
-       return result.stocks.likes;
+       return 1;
      }else return 0;
-    })
-     .catch((err)=>console.log(err));
+    }
+    } catch{console.log(err)};
  };
 
  module.exports = {findOneAndUpdateDB};
