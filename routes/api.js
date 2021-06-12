@@ -31,7 +31,9 @@ module.exports = function(app) {
           if(req.query.like ==='true'){
           results[x].rel_likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
           {stock:arr[x].toUpperCase(),likes:1}})
-
+          }else{
+            results[x].rel_likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
+              {stock:arr[x].toUpperCase()}})
           }
         }
         console.log(results)
@@ -46,6 +48,9 @@ module.exports = function(app) {
       if(req.query.like ==='true'){
         stockData.likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
         {stock:symbol.toUpperCase(),likes:1}});
+      }else{
+        stockData.likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
+          {stock:symbol.toUpperCase()}})
       }
       res.json({stockData});
     }

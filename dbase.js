@@ -19,23 +19,25 @@ const createEntry = async (ip,stocks)=>{
        const client = new Client(ip,stocks);
        const result = await client.save()
        console.log(result)
-  }catch{(err)=>console.log(err)};
+  }catch (error){(error)=>console.log(error)};
 }
 
 const findOneAndUpdateDB = async (ip,stocks)=>{
   try{
     const foundOne = await Client.findOne(ip).exec();
       if(!foundOne){
-       createEntry(ip,stocks);
+       const newOne = await createEntry(ip,stocks);
+       if(newOne.stocks.likes && newOne.stocks.likes===1){
+         return 1;
+       }else return 0;
      }else{
      console.log(`Found ${foundOne}`);
-     //like logic
      if(foundOne.stocks.likes){
        console.log("already liked");
        return 1;
-     }else return 0;
+     } else return 0;
     }
-    } catch{console.log(err)};
+    } catch (error) {console.log(error)};
  };
 
  module.exports = {findOneAndUpdateDB};
