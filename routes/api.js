@@ -25,17 +25,21 @@ module.exports = function(app) {
       const asyncLoop = async ()=>{
         let results = [];
         const arr = symbol;
+        let tempArr = [];
         for(let x in arr){
+          if (x>2)break;
           let stockInfo = await getStock(arr[x])
           results.push(stockInfo)
           if(req.query.like ==='true'){
-          results[x].rel_likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
+          tempArr[x] = await dbase.findOneAndUpdateDB({ip:IP,stocks:
           {stock:arr[x].toUpperCase(),likes:1}})
           }else{
-            results[x].rel_likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
+            tempArr[x] = await dbase.findOneAndUpdateDB({ip:IP,stocks:
               {stock:arr[x].toUpperCase()}})
           }
         }
+        results[0].rel_likes = tempArr[0]-tempArr[1]
+        results[1].rel_likes = tempArr[1]-tempArr[0]
         console.log(results)
         return results;
     }

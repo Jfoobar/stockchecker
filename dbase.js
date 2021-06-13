@@ -18,7 +18,7 @@ const createEntry = async (ip,stocks)=>{
        Client.init();
        const client = new Client(ip,stocks);
        const result = await client.save()
-       console.log(result)
+       return result;
   }catch (error){(error)=>console.log(error)};
 }
 
@@ -27,6 +27,7 @@ const findOneAndUpdateDB = async (ip,stocks)=>{
     const foundOne = await Client.findOne(ip).exec();
       if(!foundOne){
        const newOne = await createEntry(ip,stocks);
+       console.log(`new one: ${newOne}`)
        if(newOne.stocks.likes && newOne.stocks.likes===1){
          return 1;
        }else return 0;
