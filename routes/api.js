@@ -42,11 +42,10 @@ module.exports = function(app) {
         results[1].rel_likes = tempArr[1]-tempArr[0]
         console.log(results)
         return results;
-    }
-    const stockData = await asyncLoop();
-    res.json({stockData})
-    console.log(stockData)
-
+      }
+      const stockData = await asyncLoop();
+      res.json({stockData})
+      console.log(stockData)
     }else{
       const stockData = await getStock(req.query.stock,res);
       if(req.query.like ==='true'){

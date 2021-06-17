@@ -33,7 +33,7 @@ const findOneAndUpdateDB = async (ip,stocks)=>{
        }else return 0;
      }else{
      console.log(`Found ${foundOne}`);
-     if(foundOne.stocks.likes){
+     if(foundOne.stocks.likes>0){
        console.log("already liked");
        return 1;
      } else return 0;
