@@ -18,8 +18,8 @@ module.exports = function(app) {
 		}
 	app.route('/api/stock-prices',).get(async (req,res) =>{
 		const IP = req.ip;
-    const symbol = req.query.stock;
-    console.log(`${IP} submited this:${req.query}`);
+    const symbol = req.query.stock
+    console.log(`${IP} submited this:${symbol}`);
     
     if (Array.isArray(symbol)){
       const asyncLoop = async ()=>{
@@ -32,10 +32,10 @@ module.exports = function(app) {
           results.push(stockInfo)
           if(req.query.like ==='true'){
           tempArr[x] = await dbase.findOneAndUpdateDB({ip:IP,stocks:
-          {stock:arr[x].toUpperCase(),likes:1}})
+          [{stock:arr[x].toUpperCase(),likes:1}]})
           }else{
             tempArr[x] = await dbase.findOneAndUpdateDB({ip:IP,stocks:
-              {stock:arr[x].toUpperCase()}})
+              [{stock:arr[x].toUpperCase()}]})
           }
         }
         results[0].rel_likes = tempArr[0]-tempArr[1]
@@ -47,13 +47,13 @@ module.exports = function(app) {
       res.json({stockData})
       console.log(stockData)
     }else{
-      const stockData = await getStock(req.query.stock,res);
+      const stockData = await getStock(symbol,res);
       if(req.query.like ==='true'){
         stockData.likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
-        {stock:symbol.toUpperCase(),likes:1}});
+          [{stock:symbol.toUpperCase(),likes:1}]});
       }else{
         stockData.likes = await dbase.findOneAndUpdateDB({ip:IP,stocks:
-          {stock:symbol.toUpperCase()}})
+          [{stock:symbol.toUpperCase()}]})
       }
       res.json({stockData});
     }
