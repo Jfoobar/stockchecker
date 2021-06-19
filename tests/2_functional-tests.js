@@ -6,13 +6,13 @@ const server = require('../server');
 chai.use(chaiHttp);
 
 suite('Functional Tests', ()=> {
-    suite("5 functional req tests", () => {
+    suite("Five functional req tests", () => {
         test("View one stock: GET request to /api/stock-prices/", (done)=> {
           chai
             .request(server)
             .get("/api/stock-prices/")
             .set("content-type", "application/json")
-            .query({ stock: "BYND" })
+            .query({stock: "BYND" })
             .end( (err, res) => {
               assert.equal(res.status, 200);
               assert.equal(res.body.stockData.stock, "BYND");
@@ -25,7 +25,7 @@ suite('Functional Tests', ()=> {
             .request(server)
             .get("/api/stock-prices/")
             .set("content-type", "application/json")
-            .query({ stock: "JOE", like: true })
+            .query({stock: "JOE", like: true })
             .end((err, res)=>{
               assert.equal(res.status, 200);
               assert.equal(res.body.stockData.stock, "JOE");
@@ -39,7 +39,7 @@ suite('Functional Tests', ()=> {
             .request(server)
             .get("/api/stock-prices/")
             .set("content-type", "application/json")
-            .query({ stock: "JOE", like: true })
+            .query({stock: "JOE", like: true })
             .end((err, res)=>{
               assert.equal(res.status, 200);
               assert.equal(res.body.stockData.stock, "JOE");
@@ -53,7 +53,7 @@ suite('Functional Tests', ()=> {
             .request(server)
             .get("/api/stock-prices/")
             .set("content-type", "application/json")
-            .query({ stock: ["MDB", "DELL"] })
+            .query({stock: ["MDB", "DELL"] })
             .end((err, res) => {
               assert.equal(res.status, 200);
               assert.equal(res.body.stockData[0].stock, "MDB");
@@ -68,7 +68,7 @@ suite('Functional Tests', ()=> {
             .request(server)
             .get("/api/stock-prices/")
             .set("content-type", "application/json")
-            .query({ stock: ["MDB", "DELL"], like: true })
+            .query({stock: ["MDB", "DELL"], like: true })
             .end((err, res) => {
               assert.equal(res.status, 200);
               assert.equal(res.body.stockData[0].stock, "MDB");

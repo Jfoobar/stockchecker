@@ -22,15 +22,13 @@ const createEntry = async (ob)=>{
   }catch (error){(error)=>console.log(`create error: ${error}`)};
 }
 
-
-
 const findOneAndUpdateDB = async (ob)=>{
-  console.log(`this was passed:${JSON.stringify(ob.stocks)}\n`)
+  console.log(`this was passed:${JSON.stringify(ob.stocks)}\n`);
   try{
     const foundOne = await Client.findOne({ip:ob.ip}).exec();
       if(!foundOne){
        const newOne = await createEntry(ob);
-       console.log(`new one: ${newOne}`)
+       console.log(`new one: ${newOne}`);
        if(ob.stocks[0].likes && ob.stocks[0].likes===1){
          return 1;
        }else return 0;
@@ -41,9 +39,9 @@ const findOneAndUpdateDB = async (ob)=>{
       console.log(`Found ${foundOne} that needs like`);
       //update
       foundOne.stocks.push(ob.stocks[0])//stock.likes = 1;
-      foundOne.markModified('stocks')
+      foundOne.markModified('stocks');
       const updatedOne = await foundOne.save();
-      console.log(`Updated: ${updatedOne}`)
+      console.log(`Updated: ${updatedOne}`);
       return 1;
      }
      else{

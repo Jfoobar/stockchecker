@@ -9,18 +9,17 @@ module.exports = function(app) {
 	  try {
 			const response = await axios.get(
 				`https://stock-price-checker-proxy.freecodecamp.rocks/v1/stock/${stock}/quote`);
-        const {symbol,latestPrice} = response.data
-        return {stock:symbol,price:latestPrice}
+        const {symbol,latestPrice} = response.data;
+        return {stock:symbol,price:latestPrice};
 		}catch (error) {
-				console.error(error.message)
-        res.status(404).json({Msg:error.message, Details:`${stock} is not a valid stock symbol`})
+				console.error(error.message);
+        res.status(404).json({Msg:error.message, Details:`${stock} is not a valid stock symbol`});
 			}
 		}
 	app.route('/api/stock-prices',).get(async (req,res) =>{
 		const IP = req.ip;
-    const symbol = req.query.stock
-    console.log(`${IP} submited this:${symbol}`);
-    
+    const symbol = req.query.stock;
+
     if (Array.isArray(symbol)){
       const asyncLoop = async ()=>{
         let results = [];
@@ -28,24 +27,22 @@ module.exports = function(app) {
         let tempArr = [];
         for(let x in arr){
           if (x>2)break;
-          let stockInfo = await getStock(arr[x])
+          let stockInfo = await getStock(arr[x]);
           results.push(stockInfo)
           if(req.query.like ==='true'){
           tempArr[x] = await dbase.findOneAndUpdateDB({ip:IP,stocks:
-          [{stock:arr[x].toUpperCase(),likes:1}]})
+          [{stock:arr[x].toUpperCase(),likes:1}]});
           }else{
             tempArr[x] = await dbase.findOneAndUpdateDB({ip:IP,stocks:
-              [{stock:arr[x].toUpperCase()}]})
+              [{stock:arr[x].toUpperCase()}]});
           }
         }
         results[0].rel_likes = tempArr[0]-tempArr[1]
         results[1].rel_likes = tempArr[1]-tempArr[0]
-        console.log(results)
         return results;
       }
       const stockData = await asyncLoop();
-      res.json({stockData})
-      console.log(stockData)
+      res.json({stockData});
     }else{
       const stockData = await getStock(symbol,res);
       if(req.query.like ==='true'){
